@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Sign in to your Luma workspace.">
+	<title>Sign in | Luma</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--ink: #202326;
+			--muted: #72777b;
+			--line: #e3e4df;
+			--paper: #f7f7f3;
+			--white: #ffffff;
+			--coral: #ef765f;
+			--coral-dark: #d95b45;
+			--sage: #cdd9c5;
+			--forest: #27453b;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			min-width: 320px;
+			min-height: 100vh;
+			color: var(--ink);
+			background: var(--paper);
+			font-family: "DM Sans", sans-serif;
+		}
+
+		.page {
+			display: grid;
+			grid-template-columns: minmax(320px, 0.95fr) minmax(440px, 1.05fr);
+			min-height: 100vh;
+			overflow: hidden;
+		}
+
+		.brand-panel {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			min-height: 680px;
+			padding: clamp(28px, 5vw, 64px);
+			overflow: hidden;
+			background: var(--sage);
+		}
+
+		.brand-panel::before,
+		.brand-panel::after {
+			position: absolute;
+			content: "";
+			border: 1px solid rgba(39, 69, 59, 0.22);
+			border-radius: 50%;
+		}
+
+		.brand-panel::before {
+			width: min(42vw, 520px);
+			height: min(42vw, 520px);
+			right: -18%;
+			bottom: -8%;
+		}
+
+		.brand-panel::after {
+			width: min(25vw, 300px);
+			height: min(25vw, 300px);
+			right: 6%;
+			bottom: 11%;
+		}
+
+		.brand-mark,
+		.panel-copy,
+		.quote {
+			position: relative;
+			z-index: 1;
+		}
+
+		.brand-mark {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: var(--forest);
+			font-family: "Space Grotesk", sans-serif;
+			font-size: 1.15rem;
+			font-weight: 700;
+			letter-spacing: -0.03em;
+		}
+
+		.brand-mark span {
+			display: grid;
+			place-items: center;
+			width: 30px;
+			height: 30px;
+			border-radius: 9px 9px 9px 2px;
+			background: var(--coral);
+			color: var(--white);
+			font-size: 0.9rem;
+		}
+
+		.panel-copy { max-width: 480px; }
+
+		.eyebrow {
+			margin: 0 0 18px;
+			color: var(--forest);
+			font-size: 0.72rem;
+			font-weight: 700;
+			letter-spacing: 0.17em;
+			text-transform: uppercase;
+		}
+
+		h1,
+		h2,
+		p { margin-top: 0; }
+
+		h1 {
+			max-width: 500px;
+			margin-bottom: 24px;
+			color: var(--forest);
+			font-family: "Space Grotesk", sans-serif;
+			font-size: clamp(3rem, 5vw, 5.6rem);
+			line-height: 0.96;
+			letter-spacing: -0.07em;
+		}
+
+		.panel-copy > p:last-child {
+			max-width: 360px;
+			margin-bottom: 0;
+			color: rgba(39, 69, 59, 0.78);
+			font-size: 1rem;
+			line-height: 1.65;
+		}
+
+		.quote {
+			max-width: 310px;
+			margin: 0;
+			padding-left: 16px;
+			border-left: 2px solid var(--coral);
+			color: var(--forest);
+			font-size: 0.83rem;
+			line-height: 1.55;
+		}
+
+		.quote cite {
+			display: block;
+			margin-top: 10px;
+			color: rgba(39, 69, 59, 0.65);
+			font-size: 0.72rem;
+			font-style: normal;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+		}
+
+		.form-panel {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: clamp(32px, 7vw, 100px);
+			background: var(--white);
+		}
+
+		.form-wrap { width: min(100%, 410px); }
+
+		.form-header { margin-bottom: 40px; }
+
+		.form-header h2 {
+			margin-bottom: 10px;
+			font-family: "Space Grotesk", sans-serif;
+			font-size: clamp(2rem, 3vw, 2.65rem);
+			letter-spacing: -0.06em;
+		}
+
+		.form-header p {
+			margin-bottom: 0;
+			color: var(--muted);
+			font-size: 0.95rem;
+		}
+
+		.field { margin-bottom: 22px; }
+
+		label {
+			display: block;
+			margin-bottom: 9px;
+			color: #42474a;
+			font-size: 0.78rem;
+			font-weight: 700;
+			letter-spacing: 0.02em;
+		}
+
+		input {
+			width: 100%;
+			height: 54px;
+			padding: 0 16px;
+			border: 1px solid var(--line);
+			border-radius: 8px;
+			outline: 0;
+			color: var(--ink);
+			background: #fbfbf9;
+			font: inherit;
+			transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+		}
+
+		input:focus {
+			border-color: var(--coral);
+			background: var(--white);
+			box-shadow: 0 0 0 4px rgba(239, 118, 95, 0.14);
+		}
+
+		.password-control { position: relative; }
+
+		.password-control input { padding-right: 62px; }
+
+		.toggle-password {
+			position: absolute;
+			top: 50%;
+			right: 12px;
+			width: 38px;
+			height: 34px;
+			padding: 0;
+			transform: translateY(-50%);
+			border: 0;
+			border-radius: 6px;
+			color: var(--muted);
+			background: transparent;
+			cursor: pointer;
+			font: inherit;
+			font-size: 0.72rem;
+			font-weight: 700;
+		}
+
+		.toggle-password:hover { color: var(--coral-dark); background: #fff0ec; }
+
+		.form-options {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			margin: 4px 0 28px;
+			font-size: 0.8rem;
+		}
+
+		.remember {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin: 0;
+			color: var(--muted);
+			font-weight: 500;
+			cursor: pointer;
+		}
+
+		.remember input {
+			width: 16px;
+			height: 16px;
+			accent-color: var(--coral);
+		}
+
+		a { color: var(--coral-dark); font-weight: 700; text-decoration: none; }
+		a:hover { text-decoration: underline; }
+
+		.submit-button {
+			width: 100%;
+			min-height: 54px;
+			border: 0;
+			border-radius: 8px;
+			color: var(--white);
+			background: var(--coral);
+			box-shadow: 0 8px 18px rgba(217, 91, 69, 0.18);
+			cursor: pointer;
+			font: inherit;
+			font-weight: 700;
+			transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+		}
+
+		.submit-button:hover {
+			background: var(--coral-dark);
+			box-shadow: 0 10px 24px rgba(217, 91, 69, 0.25);
+			transform: translateY(-2px);
+		}
+
+		.submit-button:active { transform: translateY(0); }
+
+		.status {
+			min-height: 22px;
+			margin: 14px 0 0;
+			color: var(--coral-dark);
+			font-size: 0.8rem;
+			text-align: center;
+		}
+
+		.signup {
+			margin: 30px 0 0;
+			color: var(--muted);
+			font-size: 0.84rem;
+			text-align: center;
+		}
+
+		@media (max-width: 800px) {
+			.page { grid-template-columns: 1fr; }
+			.brand-panel { min-height: 390px; padding: 30px clamp(24px, 8vw, 64px); }
+			.brand-panel::before { width: 360px; height: 360px; right: -18%; bottom: -42%; }
+			.brand-panel::after { display: none; }
+			.quote { display: none; }
+			h1 { max-width: 400px; margin-bottom: 0; font-size: clamp(3rem, 12vw, 5rem); }
+			.panel-copy > p:last-child { display: none; }
+			.form-panel { align-items: flex-start; padding: 58px clamp(24px, 8vw, 64px) 70px; }
+		}
+
+		@media (max-width: 430px) {
+			.brand-panel { min-height: 330px; }
+			.form-header { margin-bottom: 32px; }
+			.form-options { align-items: flex-start; flex-direction: column; }
+		}
+	</style>
+</head>
+<body>
+	<main class="page">
+		<section class="brand-panel" aria-label="About Luma">
+			<div class="brand-mark"><span>✦</span> luma</div>
+			<div class="panel-copy">
+				<p class="eyebrow">A calmer way to work</p>
+				<h1>Make room for good work.</h1>
+				<p>Luma brings your ideas, people, and momentum into one thoughtful workspace.</p>
+			</div>
+			<blockquote class="quote">
+				“The clearest place to start the day.”
+				<cite>— Luma community</cite>
+			</blockquote>
+		</section>
+
+		<section class="form-panel" aria-labelledby="login-title">
+			<div class="form-wrap">
+				<header class="form-header">
+					<p class="eyebrow">Welcome back</p>
+					<h2 id="login-title">Sign in to Luma</h2>
+					<p>Enter your details to continue to your workspace.</p>
+				</header>
+
+				<form id="login-form">
+					<div class="field">
+						<label for="email">Email address</label>
+						<input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+					</div>
+
+					<div class="field">
+						<label for="password">Password</label>
+						<div class="password-control">
+							<input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" minlength="6" required>
+							<button class="toggle-password" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+						</div>
+					</div>
+
+					<div class="form-options">
+						<label class="remember" for="remember">
+							<input id="remember" name="remember" type="checkbox">
+							Remember me
+						</label>
+						<a href="#forgot-password">Forgot password?</a>
+					</div>
+
+					<button class="submit-button" type="submit">Sign in</button>
+					<p class="status" role="status" aria-live="polite"></p>
+				</form>
+
+				<p class="signup">New to Luma? <a href="#create-account">Create an account</a></p>
+			</div>
+		</section>
+	</main>
+
+	<script>
+		const loginForm = document.querySelector('#login-form');
+		const passwordInput = document.querySelector('#password');
+		const togglePassword = document.querySelector('.toggle-password');
+		const statusMessage = document.querySelector('.status');
+
+		togglePassword.addEventListener('click', () => {
+			const isVisible = passwordInput.type === 'text';
+			passwordInput.type = isVisible ? 'password' : 'text';
+			togglePassword.textContent = isVisible ? 'Show' : 'Hide';
+			togglePassword.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
+			togglePassword.setAttribute('aria-pressed', String(!isVisible));
+		});
+
+		loginForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			statusMessage.textContent = 'Your sign-in details are ready to send.';
+		});
+	</script>
+</body>
+</html>
